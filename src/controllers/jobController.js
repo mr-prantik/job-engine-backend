@@ -1,37 +1,19 @@
 const Job = require("../models/jobModel");
+const mongoose = require("mongoose");
 
-// GET /api/jobs
 exports.getJobs = async (req, res) => {
   try {
-    const { search, location, limit = 50 } = req.query;
+    console.log("📦 DB:", mongoose.connection.name);
+    console.log("📁 Collection:", Job.collection.name);
 
-    let query = {};
+    const count = await Job.countDocuments();
+    console.log("📊 Total jobs in DB:", count);
 
-    if (search) {
-      query.title = { $regex: search, $options: "i" };
-    }
-
-    if (location) {
-      query.location = { $regex: location, $options: "i" };
-    }
-
-    const jobs = await Job.find(query)
-      .sort({ created_at: -1 })
-      .limit(Number(limit));
+    const jobs = await Job.find();
 
     res.json(jobs);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
-  }
-};
-
-
-// GET /api/jobs/:id
-exports.getJobById = async (req, res) => {
-  try {
-    const job = await Job.findById(req.params.id);
-    res.json(job);
-  } catch (err) {
-    res.status(404).json({ error: "Job not found" });
   }
 };

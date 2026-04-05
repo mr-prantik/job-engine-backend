@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const jobSchema = new mongoose.Schema({
-  _id: String, // hash from Python
+  _id: String, 
   title: String,
   company: String,
   location: String,
@@ -11,4 +11,4 @@ const jobSchema = new mongoose.Schema({
   created_at: Date
 });
 
-module.exports = mongoose.model("Job", jobSchema);
+module.exports = mongoose.model("Job", jobSchema, "Jobs");
